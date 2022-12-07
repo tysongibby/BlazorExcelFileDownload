@@ -1,0 +1,15 @@
+﻿@page "/"
+@using ExcelFileDownload.Data
+@inject IJSRuntime iJsRuntime
+
+<h1>Blazer Excel Generate</h1>
+
+<button class="btn btn-primary" @onclick="GenerateExcel">Generate Excel</button>
+
+@code{
+    private void GenerateExcel()
+    {
+        Student student = new Student();
+        student.GenerateExcel(iJsRuntime);
+    }
+}
