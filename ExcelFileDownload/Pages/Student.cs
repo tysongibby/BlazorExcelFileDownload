@@ -1,6 +1,4 @@
-﻿// Blazor : Generate and Download Excel File [Microsoft Excel Report] https://www.youtube.com/watch?v=ALH7X0nZBkg
-
-using OfficeOpenXml;
+﻿using OfficeOpenXml;
 using Microsoft.JSInterop;
 using OfficeOpenXml.Style;
 using System;
