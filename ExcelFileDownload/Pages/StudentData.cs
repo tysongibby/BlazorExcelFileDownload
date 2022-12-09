@@ -5,7 +5,7 @@ using System;
 
 namespace ExcelFileDownload.Pages
 {
-    public class Student
+    public class StudentData
     {
         public void GenerateExcel(IJSRuntime iJsRuntime)
         {
@@ -16,42 +16,52 @@ namespace ExcelFileDownload.Pages
             {
                 var workSheet = package.Workbook.Worksheets.Add("Sheet1");
 
-                #region Header Row
+                #region Header
                 workSheet.Cells[1, 1].Value = "Student name";
                 workSheet.Cells[1, 1].Style.Font.Size = 12;
                 workSheet.Cells[1, 1].Style.Font.Bold = true;
                 workSheet.Cells[1, 1].Style.Border.Top.Style = ExcelBorderStyle.Hair;
 
-                workSheet.Cells[1, 2].Value = "Student Roll";
+                workSheet.Cells[1, 2].Value = "Student Id";
                 workSheet.Cells[1, 2].Style.Font.Size = 12;
                 workSheet.Cells[1, 2].Style.Font.Bold = true;
                 workSheet.Cells[1, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
                 #endregion
 
-                #region Body 1st Row
-                workSheet.Cells[1, 1].Value = "Shakib";
-                workSheet.Cells[1, 1].Style.Font.Size = 12;
-                workSheet.Cells[1, 1].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+                #region Record
+                workSheet.Cells[2, 1].Value = "Verl";
+                workSheet.Cells[2, 1].Style.Font.Size = 12;
+                workSheet.Cells[2, 1].Style.Border.Top.Style = ExcelBorderStyle.Hair;
 
-                workSheet.Cells[1, 2].Value = "Student Roll";
-                workSheet.Cells[1, 2].Style.Font.Size = 12;
-                workSheet.Cells[1, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+                workSheet.Cells[2, 2].Value = "1000";
+                workSheet.Cells[2, 2].Style.Font.Size = 12;
+                workSheet.Cells[2, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
                 #endregion
 
-                #region Body 2nd Row
-                workSheet.Cells[3, 1].Value = "Rohit";
+                #region Record
+                workSheet.Cells[3, 1].Value = "Bertha";
                 workSheet.Cells[3, 1].Style.Font.Size = 12;
                 workSheet.Cells[3, 1].Style.Border.Top.Style = ExcelBorderStyle.Hair;
 
-                workSheet.Cells[3, 2].Value = "1002";
+                workSheet.Cells[3, 2].Value = "1001";
                 workSheet.Cells[3, 2].Style.Font.Size = 12;
                 workSheet.Cells[3, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+                #endregion
+
+                #region Record
+                workSheet.Cells[4, 1].Value = "Callithria";
+                workSheet.Cells[4, 1].Style.Font.Size = 12;
+                workSheet.Cells[4, 1].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+                                
+                workSheet.Cells[4, 2].Value = "1003";
+                workSheet.Cells[4, 2].Style.Font.Size = 12;
+                workSheet.Cells[4, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
                 #endregion
 
                 fileContents = package.GetAsByteArray();
             }
 
-            iJsRuntime.InvokeAsync<Student>(
+            iJsRuntime.InvokeAsync<StudentData>(
                     "saveAsFile",
                     "Student List.xlsx",
                     Convert.ToBase64String(fileContents)
