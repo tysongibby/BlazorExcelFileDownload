@@ -1,21 +1,21 @@
-﻿@page "/"
+@page "/"
 @inject IJSRuntime iJsRuntime
 
 <h1>Blazer Excel Generate</h1>
 
-<button class="btn btn-primary" @onclick="GenerateExcelEpPlus">Generate Excel from EP Plus</button>
+<button class="btn btn-primary" @onclick="GenerateExcelEpPlus">Generate Excel from EPPlus</button>
 <button class="btn btn-primary" @onclick="GenerateExcelClosedXml">Generate Excel from Closed XML</button>
 
 @code{
     private void GenerateExcelEpPlus()
     {
-        StudentData student = new StudentData();
-        student.GenerateExcelEpPlus(iJsRuntime);
+        ExportData export = new ExportData();
+        export.GenerateExcelEpPlus(iJsRuntime);
     }
 
     private void GenerateExcelClosedXml()
     {
-        StudentData student = new StudentData();
-        student.GenerateExcelClosedXml(iJsRuntime);
+        ExportData export = new ExportData();
+        export.GenerateExcelClosedXml(iJsRuntime);
     }
 }
