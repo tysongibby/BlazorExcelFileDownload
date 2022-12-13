@@ -1,4 +1,4 @@
-﻿using OfficeOpenXml;
+using OfficeOpenXml;
 using Microsoft.JSInterop;
 using OfficeOpenXml.Style;
 using System;
@@ -10,13 +10,14 @@ using System.IO;
 
 namespace ExcelFileDownload.Pages
 {
-    public class StudentData
+    public class ExportData
     {
         public void GenerateExcelEpPlus(IJSRuntime iJsRuntime)
         {
             byte[] fileContents;
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+            // Create Excel Workbook with data
             using (var package = new ExcelPackage())
             {
                 var workSheet = package.Workbook.Worksheets.Add("Sheet1");
@@ -63,10 +64,12 @@ namespace ExcelFileDownload.Pages
                 workSheet.Cells[4, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
                 #endregion
 
+                // convert Excel Workbook to ByteArray
                 fileContents = package.GetAsByteArray();
             }
 
-            iJsRuntime.InvokeAsync<StudentData>(
+            // Export as Excel Workbook via JavaScript
+            iJsRuntime.InvokeAsync<ExportData>(
                     "saveAsFile",
                     "Student List - EPPlus.xlsx",
                     Convert.ToBase64String(fileContents)
@@ -75,20 +78,21 @@ namespace ExcelFileDownload.Pages
 
         public void GenerateExcelClosedXml(IJSRuntime iJsRuntime)
         {
-
+            // Create DataTable with data
             DataTable dt = new DataTable("Student List");
             dt.Columns.Add("Id", typeof(int));
-            dt.Columns.Add("Name", typeof(string));            
-            
+            dt.Columns.Add("Name", typeof(string));                        
             dt.Rows.Add(1000, "Verl");
             dt.Rows.Add(1001, "Bertha");
             dt.Rows.Add(1003, "Callithria");
             dt.Rows.Add(1004, "Gandalf");
 
+            // Create Excel Workbook and Worksheet from DataTable
             XLWorkbook wb = new XLWorkbook();
-            wb.Worksheets.Add(dt, "Sheet1"); 
-            byte[] fileContents;
+            wb.Worksheets.Add(dt, "Sheet1");
 
+            // Convert Excel Workbook to ByteArray
+            byte[] fileContents;
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 wb.SaveAs(memoryStream);
@@ -96,7 +100,8 @@ namespace ExcelFileDownload.Pages
 
             }
 
-            iJsRuntime.InvokeAsync<StudentData>(
+            // Export as Excel Workbook via JavaScript
+            iJsRuntime.InvokeAsync<ExportData>(
                 "saveAsFile",
                 "Student List - ClosedXML.xlsx",
                 Convert.ToBase64String(fileContents)
