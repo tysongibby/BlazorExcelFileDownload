@@ -15,6 +15,7 @@ namespace ExcelFileDownload.Pages
         public void GenerateExcelEpPlus(IJSRuntime iJsRuntime)
         {
             byte[] fileContents;
+            string fileTypeString = "data: application / vnd.openxmlformats - officedocument.spreadsheetml.sheet; base64";
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             // Create Excel Workbook with data
@@ -68,10 +69,13 @@ namespace ExcelFileDownload.Pages
                 fileContents = package.GetAsByteArray();
             }
 
+
+
             // Export as Excel Workbook via JavaScript
             iJsRuntime.InvokeAsync<ExportData>(
-                    "saveAsFile",
+                    "DownloadFile",
                     "Student List - EPPlus.xlsx",
+                    fileTypeString,
                     Convert.ToBase64String(fileContents)
             );
         }
@@ -92,19 +96,21 @@ namespace ExcelFileDownload.Pages
             wb.Worksheets.Add(dt, "Sheet1");
 
             // Convert Excel Workbook to ByteArray
-            byte[] fileContents;
+            byte[] fileByteArray;
+            string fileTypeString = "data: application / vnd.openxmlformats - officedocument.spreadsheetml.sheet; base64";
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 wb.SaveAs(memoryStream);
-                fileContents= memoryStream.ToArray();
+                fileByteArray= memoryStream.ToArray();
 
             }
 
             // Export as Excel Workbook via JavaScript
             iJsRuntime.InvokeAsync<ExportData>(
-                "saveAsFile",
+                "DownloadFile",
                 "Student List - ClosedXML.xlsx",
-                Convert.ToBase64String(fileContents)
+                fileTypeString,
+                Convert.ToBase64String(fileByteArray)
             );
 
 
