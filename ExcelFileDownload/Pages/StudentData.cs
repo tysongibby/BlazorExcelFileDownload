@@ -2,12 +2,17 @@
 using Microsoft.JSInterop;
 using OfficeOpenXml.Style;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using ClosedXML.Excel;
+using System.IO;
 
 namespace ExcelFileDownload.Pages
 {
     public class StudentData
     {
-        public void GenerateExcel(IJSRuntime iJsRuntime)
+        public void GenerateExcelEpPlus(IJSRuntime iJsRuntime)
         {
             byte[] fileContents;
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -52,8 +57,8 @@ namespace ExcelFileDownload.Pages
                 workSheet.Cells[4, 1].Value = "Callithria";
                 workSheet.Cells[4, 1].Style.Font.Size = 12;
                 workSheet.Cells[4, 1].Style.Border.Top.Style = ExcelBorderStyle.Hair;
-                                
-                workSheet.Cells[4, 2].Value = "1003";
+
+                workSheet.Cells[4, 2].Value = "1002";
                 workSheet.Cells[4, 2].Style.Font.Size = 12;
                 workSheet.Cells[4, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
                 #endregion
@@ -63,9 +68,41 @@ namespace ExcelFileDownload.Pages
 
             iJsRuntime.InvokeAsync<StudentData>(
                     "saveAsFile",
-                    "Student List.xlsx",
+                    "Student List - EPPlus.xlsx",
                     Convert.ToBase64String(fileContents)
-                );
+            );
+        }
+
+        public void GenerateExcelClosedXml(IJSRuntime iJsRuntime)
+        {
+
+            DataTable dt = new DataTable("Student List");
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));            
+            
+            dt.Rows.Add(1000, "Verl");
+            dt.Rows.Add(1001, "Bertha");
+            dt.Rows.Add(1003, "Callithria");
+            dt.Rows.Add(1004, "Gandalf");
+
+            XLWorkbook wb = new XLWorkbook();
+            wb.Worksheets.Add(dt, "Sheet1"); 
+            byte[] fileContents;
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                wb.SaveAs(memoryStream);
+                fileContents= memoryStream.ToArray();
+
+            }
+
+            iJsRuntime.InvokeAsync<StudentData>(
+                "saveAsFile",
+                "Student List - ClosedXML.xlsx",
+                Convert.ToBase64String(fileContents)
+            );
+
+
         }
 
     }
