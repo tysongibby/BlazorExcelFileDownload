@@ -12,7 +12,7 @@ namespace ExcelFileDownload.Services
 {
     public class ExportDataFile
     {
-        public void ExportExcelEpPlus(IJSRuntime iJsRuntime, ExcelPackage excelPackage)
+        public void ExportToFile(IJSRuntime iJsRuntime, ExcelPackage excelPackage)
         {
             byte[] fileContents;
             string fileTypeString = "data: application / vnd.openxmlformats - officedocument.spreadsheetml.sheet; base64";
@@ -29,7 +29,7 @@ namespace ExcelFileDownload.Services
             );
         }
 
-        public void ExportExcelClosedXml(IJSRuntime iJsRuntime, IXLWorkbook workbook)
+        public void ExportToFile(IJSRuntime iJsRuntime, IXLWorkbook workbook)
         {
 
             // Convert Excel Workbook to ByteArray
