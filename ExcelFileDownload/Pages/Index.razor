@@ -1,21 +1,94 @@
 @page "/"
+@using ClosedXML.Excel;
+@using ExcelFileDownload.Services;
+@using OfficeOpenXml;
+@using OfficeOpenXml.Style;
+@using System.Data;
 @inject IJSRuntime iJsRuntime
 
 <h1>Blazer Excel Generate</h1>
 
-<button class="btn btn-primary" @onclick="GenerateExcelEpPlus">Generate Excel from EPPlus</button>
-<button class="btn btn-primary" @onclick="GenerateExcelClosedXml">Generate Excel from Closed XML</button>
+<button class="btn btn-primary" @onclick="ExportExcelEPPlus">Export Excel from EPPlus</button>
+<button class="btn btn-primary" @onclick="ExportExcelClosedXml">Export Excel from Closed XML</button>
 
 @code{
-    private void GenerateExcelEpPlus()
+    private void ExportExcelEPPlus()
     {
-        ExportData export = new ExportData();
-        export.GenerateExcelEpPlus(iJsRuntime);
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+        // Create Excel Workbook with data then export
+        using (var excelPackage = new ExcelPackage())
+        {
+            var excelWorksheet = excelPackage.Workbook.Worksheets.Add("Sheet1");
+
+            // Create Excel Workbook
+            #region Header
+            excelWorksheet.Cells[1, 1].Value = "Student name";
+            excelWorksheet.Cells[1, 1].Style.Font.Size = 12;
+            excelWorksheet.Cells[1, 1].Style.Font.Bold = true;
+            excelWorksheet.Cells[1, 1].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+
+            excelWorksheet.Cells[1, 2].Value = "Student Id";
+            excelWorksheet.Cells[1, 2].Style.Font.Size = 12;
+            excelWorksheet.Cells[1, 2].Style.Font.Bold = true;
+            excelWorksheet.Cells[1, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+            #endregion
+
+            #region Record
+            excelWorksheet.Cells[2, 1].Value = "Verl";
+            excelWorksheet.Cells[2, 1].Style.Font.Size = 12;
+            excelWorksheet.Cells[2, 1].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+
+            excelWorksheet.Cells[2, 2].Value = "1000";
+            excelWorksheet.Cells[2, 2].Style.Font.Size = 12;
+            excelWorksheet.Cells[2, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+            #endregion
+
+            #region Record
+            excelWorksheet.Cells[3, 1].Value = "Bertha";
+            excelWorksheet.Cells[3, 1].Style.Font.Size = 12;
+            excelWorksheet.Cells[3, 1].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+
+            excelWorksheet.Cells[3, 2].Value = "1001";
+            excelWorksheet.Cells[3, 2].Style.Font.Size = 12;
+            excelWorksheet.Cells[3, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+            #endregion
+
+            #region Record
+            excelWorksheet.Cells[4, 1].Value = "Callithria";
+            excelWorksheet.Cells[4, 1].Style.Font.Size = 12;
+            excelWorksheet.Cells[4, 1].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+
+            excelWorksheet.Cells[4, 2].Value = "1002";
+            excelWorksheet.Cells[4, 2].Style.Font.Size = 12;
+            excelWorksheet.Cells[4, 2].Style.Border.Top.Style = ExcelBorderStyle.Hair;
+            #endregion
+
+            // Export data
+            ExportDataFile export = new ExportDataFile();
+            export.ExportExcelEpPlus(iJsRuntime, excelPackage);
+        }
+
+
     }
 
-    private void GenerateExcelClosedXml()
+    private void ExportExcelClosedXml()
     {
-        ExportData export = new ExportData();
-        export.GenerateExcelClosedXml(iJsRuntime);
+        // Create DataTable with data
+        DataTable dataTable = new DataTable("Student List");
+        dataTable.Columns.Add("Id", typeof(int));
+        dataTable.Columns.Add("Name", typeof(string));
+        dataTable.Rows.Add(1000, "Verl");
+        dataTable.Rows.Add(1001, "Bertha");
+        dataTable.Rows.Add(1003, "Callithria");
+        dataTable.Rows.Add(1004, "Gandalf");
+
+        // Create Excel Workbook and Worksheet from DataTable
+        XLWorkbook workbook = new XLWorkbook();
+        workbook.Worksheets.Add(dataTable, "Freshman");
+
+        // Export data
+        ExportDataFile export = new ExportDataFile();
+        export.ExportExcelClosedXml(iJsRuntime, workbook);
     }
 }
