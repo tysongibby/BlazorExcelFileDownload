@@ -1,37 +1,22 @@
-using OfficeOpenXml;
 using Microsoft.JSInterop;
-using OfficeOpenXml.Style;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using ClosedXML.Excel;
 using System.IO;
+using System.Threading.Tasks;
 
-namespace ExcelFileDownload.Services
+namespace PDMSS.Services
 {
-    public class ExportDataFile
+    public class ExportDataFile 
     {
-        public void ExportToFile(IJSRuntime iJsRuntime, ExcelPackage excelPackage)
+        /// <summary>
+        /// Exports ClosedXML Excel Workbook as a browser client download
+        /// </summary>
+        /// <param name="iJsRuntime">Interop JavaScript Runtime or IJSRuntime</param>
+        /// <param name="workbook">ClosedXML IXLWorkbook</param>
+        /// <param name="fileName">String of filename to be exported without .xlsx extension</param>
+        /// <returns>Async Task</returns>
+        public static async Task ExportToFileAsync(IJSRuntime iJsRuntime, IXLWorkbook workbook, string fileName)
         {
-            byte[] fileContents;
-            string fileTypeString = "data: application / vnd.openxmlformats - officedocument.spreadsheetml.sheet; base64";
-
-            // convert Excel Workbook to ByteArray
-            fileContents = excelPackage.GetAsByteArray();
-
-            // Export as Excel Workbook via JavaScript
-            iJsRuntime.InvokeAsync<ExportDataFile>(
-                    "DownloadFile",
-                    "Student List - EPPlus.xlsx",
-                    fileTypeString,
-                    Convert.ToBase64String(fileContents)
-            );
-        }
-
-        public void ExportToFile(IJSRuntime iJsRuntime, IXLWorkbook workbook)
-        {
-
             // Convert Excel Workbook to ByteArray
             byte[] fileByteArray;
             string fileTypeString = "data: application / vnd.openxmlformats - officedocument.spreadsheetml.sheet; base64";
@@ -40,17 +25,13 @@ namespace ExcelFileDownload.Services
                 workbook.SaveAs(memoryStream);
                 fileByteArray= memoryStream.ToArray();
             }
-
             // Export as Excel Workbook via JavaScript
-            iJsRuntime.InvokeAsync<ExportDataFile>(
+            await iJsRuntime.InvokeAsync<ExportDataFile>(
                 "DownloadFile",
-                "Student List - ClosedXML.xlsx",
+                fileName + ".xlsx",
                 fileTypeString,
                 Convert.ToBase64String(fileByteArray)
             );
-
-
         }
-
     }
 }
