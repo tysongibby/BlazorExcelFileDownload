@@ -1,14 +1,11 @@
 @page "/"
 @using ClosedXML.Excel;
 @using ExcelFileDownload.Services;
-@using OfficeOpenXml;
-@using OfficeOpenXml.Style;
 @using System.Data;
 @inject IJSRuntime iJsRuntime
 
 <h1>Excel File Export</h1>
 
-<button class="btn btn-primary" @onclick="ExportExcelEPPlus">Export Excel from EPPlus</button>
 <button class="btn btn-primary" @onclick="ExportExcelClosedXml">Export Excel from Closed XML</button>
 
 
