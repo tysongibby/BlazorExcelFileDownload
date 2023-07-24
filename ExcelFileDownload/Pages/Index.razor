@@ -1,11 +1,9 @@
 @page "/"
-@using ClosedXML.Excel;
-@using ExcelFileDownload.Services;
-@using System.Data;
-@inject IJSRuntime iJsRuntime
 
-<h1>Excel File Export</h1>
+<h2>Export data to file</h2>
 
-<button class="btn btn-primary" @onclick="ExportExcelClosedXml">Export Excel from Closed XML</button>
+<button class="btn btn-primary mt-4" @onclick="ExportToExcel">Export to Excel</button>
+<br />
+<button class="btn btn-primary mt-4" @onclick="ExportToCsv">Export to Csv</button>
 
 

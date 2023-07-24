@@ -1,28 +1,51 @@
 using ClosedXML.Excel;
 using ExcelFileDownload.Services;
+using Microsoft.AspNetCore.Components;
 using System.Data;
 using System.Threading.Tasks;
+using Microsoft.JSInterop;
 
 namespace ExcelFileDownload.Pages
 {
     public partial class Index
     {
-        private async Task ExportExcelClosedXml()
+        [Inject] 
+        private IJSRuntime JsRuntime { get; set; }
+
+        [Inject]
+        private NavigationManager NavigationManager { get; set; }
+
+        // Create data table and workbook
+        public DataTable DataTable { get; set; } = new DataTable("Student List");        
+        private readonly XLWorkbook _workbook = new XLWorkbook();
+
+        // Create ExportDataFile service
+        private readonly ExportDataFile _export = new ExportDataFile();
+
+        protected override void OnInitialized()
         {
-            // Create DataTable with data
-            DataTable dataTable = new DataTable("Student List");
-            dataTable.Columns.Add("Id", typeof(int));
-            dataTable.Columns.Add("Name", typeof(string));
-            dataTable.Rows.Add(1000, "Verl");
-            dataTable.Rows.Add(1001, "Bertha");
-            dataTable.Rows.Add(1002, "Callithria");
-            dataTable.Rows.Add(1003, "Gandalf");
+            // Add data to DataTable
+            DataTable.Columns.Add("Id", typeof(int));
+            DataTable.Columns.Add("Name", typeof(string));
+            DataTable.Rows.Add(1000, "Verl");
+            DataTable.Rows.Add(1001, "Bertha");
+            DataTable.Rows.Add(1002, "Callithria");
+            DataTable.Rows.Add(1003, "Gandalf");
+
             // Create Excel Workbook and Worksheet from DataTable
-            XLWorkbook workbook = new XLWorkbook();
-            workbook.Worksheets.Add(dataTable, "Freshman");
-            // Export data
-            ExportDataFile export = new ExportDataFile();
-            await export.ExportToFileAsync(iJsRuntime, workbook, "StudentList");
+            _workbook.Worksheets.Add(DataTable, "Freshman");
+        }
+
+        private async Task ExportToExcel()
+        {          
+            await _export.ExportToFileAsync(JsRuntime, _workbook, "StudentList", MimeType.Excel);
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        }
+
+        private async Task ExportToCsv()
+        {
+            await _export.ExportToFileAsync(JsRuntime, _workbook, "StudentList", MimeType.Csv);
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
     }
 }
