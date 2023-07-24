@@ -12,9 +12,6 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using CsvHelper;
-using CsvHelper.Configuration;
-using CsvHelper.Configuration.Attributes;
 
 namespace ExcelFileDownload.Services
 {
@@ -283,22 +280,6 @@ namespace ExcelFileDownload.Services
     {
         Excel,
         Csv,
-    }
-
-
-    // TODO: Delete temp class CsvRow
-    public class CsvRow
-    {
-        [Index(0)]
-        public DateTime TimeStamp { get; set; }
-        [Index(1)]
-        public string SiteUrl { get; set; }
-        [Index(2)]
-        public string Message { get; set; }
-        [Index(3)]
-        public string Level { get; set; }
-
-        public CsvRow() { }
     }
 
 }
